@@ -1,3 +1,0 @@
-SESSION COOKIES: {'orangehrm': 'vo0075bq9fta3b7eg6eu90e23o'}
-POST status: 404
-Response: 
