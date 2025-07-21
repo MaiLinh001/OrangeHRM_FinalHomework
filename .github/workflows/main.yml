@@ -44,7 +44,5 @@ jobs:
 
       - name: Run tests with pytest
         run: |
-          # Di chuyển vào thư mục dự án 'homework' trước khi chạy pytest
-          cd "homework"
           # Pytest sẽ tìm kiếm các tệp với đường dẫn tương đối từ thư mục 'homework'
           pytest -v ${{ matrix.suite }} --maxfail=1 --disable-warnings -q
