@@ -15,7 +15,6 @@ jobs:
       fail-fast: false
       matrix:
         suite:
-          - homework/api/api_setup.py
           - homework/api/test_employee_api.py
 
     steps:
