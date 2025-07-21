@@ -1,0 +1,54 @@
+name: Run Automation Tests
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'homework/**' # Kích hoạt khi có thay đổi trong thư mục 'homework'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'homework/**' # Kích hoạt khi có thay đổi trong thư mục 'homework'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        suite:
+          # Các đường dẫn này bây giờ là tương đối từ bên trong thư mục "homework"
+          # Ví dụ: nếu cấu trúc dự án của bạn là homework/api/api_setup.py
+          - api/api_setup.py
+          - api/test_employee_api.py
+
+    steps:
+      - name: Checkout code
+        # Luôn sử dụng phiên bản mới nhất của actions/checkout để có các tính năng mới và bản vá lỗi
+        uses: actions/checkout@v4 
+
+      - name: Install Chrome
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y google-chrome-stable
+
+      - name: Set up Python
+        # Luôn sử dụng phiên bản mới nhất của actions/setup-python
+        uses: actions/setup-python@v5 
+        with:
+          python-version: "3.13.3"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          # Đảm bảo rằng requirements.txt nằm trong thư mục 'homework'
+          pip install -r homework/requirements.txt
+
+      - name: Run tests with pytest
+        run: |
+          # Di chuyển vào thư mục dự án 'homework' trước khi chạy pytest
+          cd "homework"
+          # Pytest sẽ tìm kiếm các tệp với đường dẫn tương đối từ thư mục 'homework'
+          pytest -v ${{ matrix.suite }} --maxfail=1 --disable-warnings -q
